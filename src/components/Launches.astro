@@ -1,10 +1,21 @@
 ---
-//puede ejecutar javascript
-const res = await fetch("https://api.spacexdata.com/v5/launches")
-const data = await res.json()
+import CardLaunch from "../components/CardLaunch.astro"
+import {getLatestLaunches} from "../services/spacex"
 
-console.log(data)
-
+const launches = await getLatestLaunches()
 ---
 
-<div class="grid gap-8 sm:grid-cols-2 lg:frid-cols-3"></div>
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    launches.map(
+        ({id, links, details, flight_number: flightNumber, success}) => (
+      <CardLaunch
+        id={id}
+        img={links.patch.small}
+        details={details}
+        flightNumber={flightNumber}
+        success={success}
+      />
+        ))
+  }
+</div>
